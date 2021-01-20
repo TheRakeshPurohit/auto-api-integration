@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { APIFunctionGenerator } from "./APIFunctionGenerator";
 import fs from "browserify-fs";
 function Display() {
-  console.log(APIFunctionGenerator());
+  useEffect(() => {
+    APIFunctionGenerator();
+  }, []);
+
   let functionVariable = "";
   fs.readFile("/API/randomAPI.txt", "utf-8", async function (err, data) {
     if (!err) {
@@ -23,6 +26,8 @@ function Display() {
           console.log("err, data :>> ", err, data);
         }
       );
+    } else {
+      console.log("File is already written");
     }
     fs.readFile("/components/Input.js", "utf-8", async function (err, data) {
       if (!err) {
