@@ -17,7 +17,7 @@ return async function ${randomJSONAPI.functionName}(randomJSONAPI) {
 }`;
 
   function createFunction(template, randomJSONAPI) {
-    return new Function(template(randomJSONAPI))();
+    return new Function(template(randomJSONAPI));
   }
 
   let functionGenerated = createFunction(
@@ -31,5 +31,47 @@ return async function ${randomJSONAPI.functionName}(randomJSONAPI) {
       escape(functionGenerated),
       function () {}
     );
+  });
+
+  let comonentInput = `
+  const Input = ({
+  label,
+  placeholder,
+  type = "text",
+}) => {
+  return (
+    <div>
+      <label
+        style={{
+          lineHeight: 2,
+          textAlign: 'left',
+          display: 'block',
+          marginTop: 20,
+          color: 'black',
+          fontSize: 18,
+          fontWeight: 200
+        }}
+        htmlFor={label}>{label}</label>
+      <input
+        name={label}
+        placeholder={placeholder}
+        type={type}
+        style={{
+          display: 'block',
+          boxSizing: 'border-box',
+          width: '100%',
+          borderRadius: 4,
+          border: '2px solid black',
+          padding: 15,
+          marginBottom: 10,
+          fontSize: 14
+        }}
+      />
+    </div>
+  );
+};
+  `;
+  fs.mkdir("/components", function () {
+    fs.writeFile("/components/Input.js", escape(comonentInput), function () {});
   });
 };
