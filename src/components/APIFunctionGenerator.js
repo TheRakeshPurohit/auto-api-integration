@@ -1,11 +1,17 @@
 import { randomJSONAPI } from "./assets/JSON/data";
 import fs from "browserify-fs";
 export const APIFunctionGenerator = () => {
-  let apiFnTemplate = (randomJSONAPI) => `
-return async function ${randomJSONAPI.functionName}(randomJSONAPI) {
-  const response = await fetch(randomJSONAPI.url, {
-    method: randomJSONAPI.method,
-    headers: randomJSONAPI.headers,
+  let apiFnTemplate = () => `
+return async function ${randomJSONAPI.functionName}() {
+  const response = await fetch("${randomJSONAPI.url}", {
+    method: "${randomJSONAPI.method}",
+    headers: ${JSON.stringify(randomJSONAPI.headers)},
+    mode: "${randomJSONAPI.mode}",
+    cache: "${randomJSONAPI.cache}",
+    credentials: "${randomJSONAPI.credentials}",
+    redirect: "${randomJSONAPI.redirect}",
+    referrerPolicy: "${randomJSONAPI.referrerPolicy}",
+    body: ${JSON.stringify(randomJSONAPI.body)},
   })
     .then(async (res) => {
       let data = await res.json();
@@ -20,10 +26,7 @@ return async function ${randomJSONAPI.functionName}(randomJSONAPI) {
     return new Function(template(randomJSONAPI));
   }
 
-  let functionGenerated = createFunction(
-    apiFnTemplate,
-    randomJSONAPI
-  )(randomJSONAPI);
+  let functionGenerated = createFunction(apiFnTemplate, randomJSONAPI)();
 
   fs.mkdir("/API", function () {
     fs.writeFile(
