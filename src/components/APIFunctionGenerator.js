@@ -1,6 +1,7 @@
 import { randomJSONAPI } from "./assets/JSON/data";
 import fs from "browserify-fs";
 export const APIFunctionGenerator = () => {
+  //template for function starts
   let apiFnTemplate = () => `
 return async function ${randomJSONAPI.functionName}() {
   const response = await fetch("${randomJSONAPI.url}", {
@@ -22,12 +23,17 @@ return async function ${randomJSONAPI.functionName}() {
     });
 }`;
 
+  //template for function ends
+
+  //function that uses new keyword to return function based on JSON and template passed as parameter
   function createFunction(template, randomJSONAPI) {
     return new Function(template(randomJSONAPI));
   }
 
+  // variable holds the generated function
   let functionGenerated = createFunction(apiFnTemplate, randomJSONAPI)();
 
+  //creates directory in Indexed DB of the browser
   fs.mkdir("/API", function () {
     fs.writeFile(
       "/API/randomAPI.txt",
@@ -36,6 +42,7 @@ return async function ${randomJSONAPI.functionName}() {
     );
   });
 
+  //components' definition
   let comonentInput = `
   const Input = ({
   label,
@@ -74,6 +81,8 @@ return async function ${randomJSONAPI.functionName}() {
   );
 };
   `;
+
+  //writes component in Indexed DB of the browser
   fs.mkdir("/components", function () {
     fs.writeFile("/components/Input.js", escape(comonentInput), function () {});
   });
